@@ -60,3 +60,64 @@
 \input{capitulos/cap5-5_1-Ninho}
 \input{capitulos/7-7.1/cap7-7_1-Soto}
 \end{document}
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tcolorbox}
+\tcbset{colback=cyan!10!white, colframe=cyan!50!black, boxrule=0.8pt, arc=3mm, left=5pt, right=5pt, top=5pt, bottom=5pt}
+
+\begin{document}
+
+\section{Clases de Sistemas Híbridos}
+
+\begin{tcolorbox}
+Los sistemas híbridos combinan dinámicas continuas con eventos discretos. 
+Existen varias clases importantes que capturan diferentes niveles de complejidad y dominios de aplicación. 
+Aquí se destacan tres clases representativas.
+\end{tcolorbox}
+
+\subsection{Autómatas Temporizados}
+\begin{tcolorbox}
+Los autómatas temporizados extienden a las máquinas de estados finitos con uno o más \emph{relojes}.  
+Estos relojes evolucionan linealmente con el tiempo y pueden reiniciarse al producirse una transición.  
+Son útiles para modelar sistemas donde la corrección depende de restricciones temporales, 
+como protocolos de comunicación, controladores con retardos temporales o planificadores de tareas.  
+\end{tcolorbox}
+
+Formalmente, un autómata temporizado consiste en estados, transiciones y un conjunto de relojes de valor real 
+que deben cumplir guardas e invariantes.
+
+\subsection{Dinámicas de Orden Superior}
+\begin{tcolorbox}
+Mientras que los autómatas temporizados sólo capturan el paso del tiempo, muchos sistemas físicos 
+requieren el modelado de dinámicas continuas de orden superior.  
+Por ejemplo, una masa conectada a un resorte presenta dinámicas de segundo orden.  
+Cuando dichas masas colisionan, las ecuaciones que las gobiernan pueden cambiar abruptamente, 
+produciendo \emph{dinámicas continuas por tramos}.  
+\end{tcolorbox}
+
+Esta clase de sistemas híbridos combina ecuaciones diferenciales con transiciones discretas, 
+representando fenómenos como impactos mecánicos, circuitos conmutados o reacciones químicas.
+
+\subsection{Control Supervisor}
+\begin{tcolorbox}
+En el control supervisor, un controlador discreto supervisa una planta continua.  
+La parte discreta determina qué ley de control o modo debe estar activo, 
+dependiendo de condiciones o eventos.  
+Este enfoque es ampliamente utilizado en sistemas de ingeniería como 
+la automatización industrial, los sistemas de seguridad automotriz y la robótica.  
+\end{tcolorbox}
+
+Ilustra cómo los modelos híbridos proporcionan una forma natural de integrar 
+la toma de decisiones lógica con el control en retroalimentación continua.
+
+\subsection*{Resumen}
+\begin{tcolorbox}
+Los sistemas híbridos abarcan modelos que combinan dinámicas continuas y discretas.  
+Los autómatas temporizados ofrecen una base para razonar sobre el tiempo, 
+las dinámicas de orden superior capturan procesos físicos más realistas, 
+y el control supervisor proporciona un método estructurado para combinar la lógica con el control.  
+\end{tcolorbox}
+
+En conjunto, estas clases forman una base para modelar sistemas ciberfísicos complejos.
+
+\end{document}
