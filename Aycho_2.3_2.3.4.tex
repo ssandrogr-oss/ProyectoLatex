@@ -1,0 +1,127 @@
+\documentclass[12pt,a4paper]{article}
+
+% Paquetes de idioma y codificación
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+% Márgenes y formato de página
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+
+% Paquetes matemáticos
+\usepackage{amsmath, amssymb, amsthm}
+
+% Mejor manejo de fuentes
+\usepackage{lmodern}
+
+% Definición de entorno "example"
+\newtheorem{example}{Ejemplo}[section]
+
+% Títulos
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+% Documento
+\begin{document}
+\subsection{Propiedades de los Sistemas}
+
+En esta sección, consideramos una serie de propiedades que los actores y los sistemas que ellos componen pueden tener, incluyendo causalidad, ausencia de memoria, linealidad, invariancia en el tiempo y estabilidad.
+
+\subsubsection{Sistemas Causales}
+
+Intuitivamente, un sistema es causal si su salida depende solo de las entradas presentes y pasadas. Sin embargo, precisar esta noción es un poco complicado. Lo hacemos dando primero una notación para “entradas presentes y pasadas.” Consideremos una señal de tiempo continuo $x : \mathbb{R}\rightarrow A$, para algún conjunto $A$.
+Sea $x|_{t\leq\tau}$ una función llamada la restricción en el tiempo que solo está definida para tiempos $t \leq \tau$, y donde está definida, $x|_{t\leq\tau}(t) = x(t)$. Así, si $x$ es una entrada a un sistema, entonces $x|_{t\leq\tau}$ son las “entradas presentes y pasadas” en el tiempo $\tau$.
+
+Consideremos un sistema de tiempo continuo $S : X \rightarrow Y$, donde $X = A^{\mathbb{R}}$ y $Y = B^{\mathbb{R}}$ para algunos conjuntos $A$ y $B$. Este sistema es causal si para todo $x_1, x_2 \in X$ y $\tau \in \mathbb{R}$,
+
+\[
+x_1|_{t\leq\tau} = x_2|_{t\leq\tau} \Rightarrow S(x_1)|_{t\leq\tau} = S(x_2)|_{t\leq\tau}
+\]
+
+Es decir, el sistema es causal si para dos posibles entradas $x_1$ y $x_2$ que son idénticas hasta (e incluyendo) el tiempo $\tau$, las salidas son idénticas hasta (e incluyendo) el tiempo $\tau$. Todos los sistemas que hemos considerado hasta ahora son causales.
+
+Un sistema es estrictamente causal si para todo $x_1, x_2 \in X$ y $\tau \in \mathbb{R}$,
+
+\[
+x_1|_{t<\tau} = x_2|_{t<\tau} \Rightarrow S(x_1)|_{t\leq\tau} = S(x_2)|_{t\leq\tau}
+\]
+
+Es decir, el sistema es estrictamente causal si para dos posibles entradas $x_1$ y $x_2$ que son idénticas hasta (y sin incluir) el tiempo $\tau$, las salidas son idénticas hasta (e incluyendo) el tiempo $\tau$.
+La salida en el tiempo $t$ de un sistema estrictamente causal no depende de su entrada en el tiempo $t$.
+
+Depende solo de las entradas pasadas. Un sistema estrictamente causal, por supuesto, también es causal. El Integrador es estrictamente causal. El sumador no es estrictamente causal, pero sí es causal. Los actores estrictamente causales son útiles para construir sistemas de retroalimentación.
+
+\subsubsection{Sistemas sin Memoria}
+
+Intuitivamente, un sistema tiene memoria si la salida depende no solo de las entradas presentes, sino también de las entradas pasadas (o entradas futuras, si el sistema no es causal). Consideremos un sistema de tiempo continuo $S : X \rightarrow Y$, donde $X = A^{\mathbb{R}}$ y $Y = B^{\mathbb{R}}$ para algunos conjuntos $A$ y $B$. Formalmente,
+este sistema es sin memoria si existe una función $f : A \rightarrow B$ tal que para todo $x \in X$,
+
+\[
+(S(x))(t) = f(x(t))
+\]
+
+para todo $t \in \mathbb{R}$. Es decir, la salida $(S(x))(t)$ en el tiempo $t$ depende solo de la entrada $x(t)$ en el tiempo $t$.
+
+El Integrador considerado arriba no es sin memoria, pero el sumador sí lo es. El Ejercicio 2 muestra que si un sistema es estrictamente causal y sin memoria, entonces su salida es constante para todas las entradas.
+
+\subsubsection{Linealidad e Invariancia en el Tiempo}
+
+Los sistemas que son lineales e invariantes en el tiempo (LTI) tienen propiedades matemáticas particularmente útiles. Gran parte de la teoría de sistemas de control depende de estas propiedades. Estas propiedades forman el cuerpo principal de los cursos de señales y sistemas, y están más allá del alcance de este texto. Pero ocasionalmente aprovecharemos versiones simples de las propiedades, por lo que es útil determinar cuándo un sistema es LTI.
+
+Un sistema $S : X \rightarrow Y$, donde $X$ y $Y$ son conjuntos de señales, es lineal si satisface la propiedad de superposición:
+
+\[
+\forall x_1, x_2 \in X \text{ y } \forall a, b \in \mathbb{R}, \quad S(ax_1 + bx_2) = aS(x_1) + bS(x_2).
+\]
+
+Es fácil ver que el sistema de helicóptero definido en el Ejemplo 2.1 es lineal si y solo si la velocidad angular inicial $\dot{\theta}_y(0) = 0$ (ver Ejercicio 3).
+
+Más generalmente, es fácil ver que un integrador como se define en el Ejemplo 2.3 es lineal si y solo si el valor inicial $i = 0$, que el actor Escalador es siempre lineal, y que la cascada de dos actores lineales es lineal. Podemos extender trivialmente la definición de linealidad a actores con más de una señal de entrada o salida y luego determinar que el sumador también es lineal.
+
+Para definir invariancia en el tiempo, primero definimos un actor especializado de tiempo continuo llamado
+retardo. Sea $D_\tau : X \rightarrow Y$, donde $X$ y $Y$ son conjuntos de señales de tiempo continuo, definido por
+
+\[
+\forall x \in X \text{ y } \forall t \in \mathbb{R}, \quad (D_\tau(x))(t) = x(t-\tau). \tag{2.7}
+\]
+
+Aquí, $\tau$ es un parámetro del actor de retardo. Un sistema $S : X \rightarrow Y$ es invariante en el tiempo si
+
+\[
+\forall x \in X \text{ y } \forall \tau \in \mathbb{R}, \quad S(D_\tau(x)) = D_\tau(S(x)).
+\]
+
+El sistema de helicóptero definido en el Ejemplo 2.1 y (2.4) no es invariante en el tiempo. Una variante menor, sin embargo, sí lo es:
+
+\[
+\dot{\theta}_y(t) = \frac{1}{I_{yy}} \int_{-\infty}^{t} T_y(\tau) d\tau
+\]
+
+Esta versión no permite una rotación angular inicial.
+
+Un sistema lineal invariante en el tiempo (LTI) es un sistema que es tanto lineal como invariante en el tiempo.
+Un objetivo importante en el modelado de dinámicas físicas es elegir un modelo LTI siempre que sea posible. Si una aproximación razonable resulta en un modelo LTI, vale la pena hacer esta aproximación. No siempre es fácil determinar si la aproximación es razonable, o encontrar modelos para los que la aproximación sea razonable. A menudo es fácil construir modelos más complicados de lo necesario (ver Ejercicio 4).
+
+\subsubsection{Estabilidad}
+
+Se dice que un sistema es estable de entrada acotada-salida acotada (BIBO estable o simplemente estable) si la señal de salida está acotada para todas las señales de entrada que están acotadas.
+
+Consideremos un sistema de tiempo continuo con entrada $w$ y salida $v$. La entrada está acotada si existe un número real $A < \infty$ tal que $|w(t)| \leq A$ para todo $t \in \mathbb{R}$. La salida está acotada si existe un número real $B < \infty$ tal que $|v(t)| \leq B$ para todo $t \in \mathbb{R}$. El sistema es estable si para cualquier entrada acotada por algún $A$, existe alguna cota $B$ en la salida.
+
+\begin{example}[]
+Ahora es fácil ver que el sistema de helicóptero desarrollado en el Ejemplo 2.1 es inestable. Sea la entrada $T_y = u$, donde $u$ es el escalón unitario, dado por
+
+\[
+\forall t \in \mathbb{R}, u(t) =
+\begin{cases}
+0, & t < 0 \\
+1, & t \geq 0
+\end{cases} \tag{2.8}
+\]
+
+Esto significa que antes del tiempo cero, no se aplica torque al sistema, y comenzando en el tiempo cero, aplicamos un torque de magnitud unitaria. Esta entrada está claramente acotada. Nunca excede uno en magnitud. Sin embargo, la salida crece sin límite. En la práctica, un helicóptero usa un sistema de retroalimentación para determinar cuánto torque aplicar en el rotor de cola para mantener recto el cuerpo del helicóptero. Estudiaremos cómo hacer eso a continuación.
+\end{example}
+
+\end{document}
