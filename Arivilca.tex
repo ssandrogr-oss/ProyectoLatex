@@ -1,0 +1,255 @@
+\documentclass[12pt,a4paper]{article}
+
+% Paquetes necesarios
+\usepackage{setspace}          % Espaciado personalizado
+\usepackage[spanish]{babel}    % Español
+\usepackage{amsmath, amssymb}  % Símbolos matemáticos
+\usepackage{tcolorbox}         % Recuadros de color
+\usepackage{tikz}              % Diagramas de bloque
+\usepackage{geometry}          % Márgenes
+\usepackage{fancyhdr}          %Encabezados y pie de página
+\usepackage{xcolor}
+
+\usetikzlibrary{arrows.meta, positioning,shapes.geometric} 
+
+\geometry{margin=3cm}
+\setstretch{1.4}
+\setlength{\parskip}{4pt} 
+\pagestyle{empty}
+
+\begin{document}
+
+\thispagestyle{fancy}
+\fancyhf{} 
+\fancyhead[L]{\textit{\textcolor{black}{2.2 MODELO DE ACTORES}}}
+\fancyfoot[R]{\textcolor{blue}{\textit{Lee \& Seshia, Introducción a los Sistemas Embebidos}}} 
+\fancyfoot[L]{24}
+
+\begin{tcolorbox}[colback=blue!10,colframe=blue!40!black]
+El torque es la suma del torque causado por el rotor principal y el causado por el rotor de cola. 
+Cuando estos se encuentran perfectamente balanceados, esa suma es cero. 
+La salida de nuestro sistema será la velocidad angular $\dot{\theta}_y$ alrededor del eje $y$. 
+La versión reducida dimensionalmente de (2.2) puede escribirse como
+\[
+\ddot{\theta}_y(t) = \frac{T_y(t)}{I_{yy}}.
+\]
+Integrando ambos lados, obtenemos la salida $\dot{\theta}$ como función de la entrada $T_y$,
+
+\[
+\dot{\theta}_y(t) = \dot{\theta}_y(0) + \frac{1}{I_{yy}} \int_{0}^{t} T_y(\tau) \, d\tau. \tag{2.4}
+\]
+\end{tcolorbox}
+
+La observación crítica de este ejemplo es que, si eligiéramos modelar el helicóptero mediante, por ejemplo, 
+dejando que $\mathbf{x}: \mathbb{R} \to \mathbb{R}^3$ represente la posición absoluta en el espacio de la cola del helicóptero, 
+terminaríamos con un modelo mucho más complicado. 
+El diseño del sistema de control también sería mucho más difícil.
+
+\subsection*{2.2. Modelos de Actores}
+En la sección anterior, un modelo de un sistema físico se da mediante una ecuación diferencial o integral 
+que relaciona las señales de entrada (fuerza o torque) con señales de salida (posición, orientación, velocidad 
+o velocidad de rotación). Tal sistema físico puede verse como un componente dentro de un sistema mayor. 
+En particular, un \textbf{sistema en tiempo continuo} (uno que opera sobre \textit{señales de tiempo continuo}) 
+puede modelarse mediante una caja con un \textbf{puerto de entrada} y un puerto de salida de la siguiente forma:
+
+\begin{center}
+\begin{tikzpicture}
+% Defino el bloque central
+\node[draw, minimum width=2.5cm, minimum height=1.5cm] (block)
+    {\shortstack{\itshape parameters:\\ $p, q$}};
+\node[above=2pt of block] {$S$};
+% Flechas
+\draw[-{Stealth[length=3mm]}] (-2,0) node[left] {$x$} -- (block.west);
+\draw[-{Stealth[length=3mm]}] (block.east) -- (2,0) node[right] {$y$};
+\end{tikzpicture}
+\end{center}
+
+donde la señal de entrada $x$ y la señal de salida $y$ son funciones de la forma
+
+\[
+x: \mathbb{R} \to \mathbb{R}, \quad y: \mathbb{R} \to \mathbb{R}.
+\]
+\newpage
+
+\thispagestyle{fancy}
+\fancyhf{} 
+\fancyhead[R]{\textit{\textcolor{black}{2. DINÁMICA CONTINUA}}}
+\fancyfoot[L]{\textcolor{blue}{\textit{Lee \& Seshia, Introducción a los Sistemas Embebidos}}} 
+\fancyfoot[R]{25}
+
+Aquí el dominio representa el \textit{tiempo} y el codominio representa el valor de la señal en un instante particular. 
+El dominio $\mathbb{R}$ puede ser reemplazado por $\mathbb{R}_+$, los reales no negativos, si deseamos modelar explícitamente un sistema que comienza a existir y empieza a operar en un momento particular en el tiempo.  
+
+El modelo del sistema es una función de la forma
+
+\[
+S: X \to Y, \tag{2.5}
+\]
+\setcounter{footnote}{2}
+donde $X = Y = \mathbb{R}^{\mathbb{R}}$, el conjunto de funciones que mapean los reales en los reales, como $x$ e $y$ arriba.\footnote{Como se explica en el Apéndice A, la notación $\mathbb{R}^{\mathbb{R}}$ (que también puede escribirse $(\mathbb{R} \to \mathbb{R})$) representa el conjunto de todas las funciones con dominio $\mathbb{R}$ y codominio $\mathbb{R}$.} 
+
+La función $S$ puede depender de parámetros del sistema, en cuyo caso los parámetros pueden mostrarse opcionalmente en la caja, y también opcionalmente incluirse en la notación de función.  
+Por ejemplo, en la figura anterior, si hay parámetros $p$ y $q$, podríamos escribir la función del sistema como $S_{p,q}$ o incluso $S(p,q)$, teniendo en cuenta que ambas notaciones representan funciones de la forma en (2.5).  
+Una caja como la de arriba, donde las entradas son funciones y las salidas son funciones, se llama un \textbf{actor}.  
+
+\begin{tcolorbox}[colback=blue!10,colframe=blue!40!black]
+Ejemplo 2.2: El modelo de actor para el helicóptero del ejemplo 2.1 puede representarse de la siguiente forma:
+
+\begin{center}
+\begin{tikzpicture}
+% Defino el bloque central
+\node[draw, minimum width=2.5cm, minimum height=1.5cm] (block)
+    {\shortstack{$I_{yy}$ \\ $\dot{\theta}_y(0)$}};
+\node[above=2pt of block] {Helicopter};
+% Flechas
+\draw[-{Stealth[length=3mm]}] (-2,0) node[left] {$T_y$} -- (block.west);
+\draw[-{Stealth[length=3mm]}] (block.east) -- (2,0) node[right] {$\dot{\theta}_y$};
+\end{tikzpicture}
+\end{center}
+
+La entrada y la salida son ambas funciones de tiempo continuo. 
+Los parámetros del actor son la velocidad angular inicial $\dot{\theta}_y(0)$ y el momento de inercia $I_{yy}$.  
+La función del actor está definida por (2.4).
+\end{tcolorbox}
+
+Los modelos de actores son composables. En particular, dados dos actores $S_1$ y $S_2$, 
+podemos formar una \textbf{composición en cascada} de la siguiente manera:
+\newpage
+
+\thispagestyle{fancy}
+\fancyhf{} 
+\fancyhead[L]{\textit{\textcolor{black}{2.2 MODELO DE ACTORES}}}
+\fancyfoot[R]{\textcolor{blue}{\textit{Lee \& Seshia, Introducción a los Sistemas Embebidos}}} 
+\fancyfoot[L]{26}
+
+\begin{center}
+\begin{tikzpicture}
+% Defino el bloque central
+\node[draw, minimum width=2cm, minimum height=1.5cm] (S1) {};
+\node[draw, minimum width=2cm, minimum height=1.5cm, right=of S1] (S2) {};
+\node[above=2pt of S1] {$S_1$};
+\node[above=2pt of S2] {$S_2$};
+% Flechas
+\draw[-{Stealth[length=3mm]}] (-2,0) node[left] {$x_1$} -- (S1.west);
+\draw[-{Stealth[length=3mm]}] (S1.east) -- node[midway,above] {$y_1, x_2$} (S2.west);
+\draw[-{Stealth[length=3mm]}] (S2.east) -- (5,0) node[right] {$y_2$};
+
+\end{tikzpicture}
+\end{center}
+
+En el diagrama, la “conexión” entre la salida de $S_1$ y la entrada de $S_2$ significa precisamente que $y_1 = x_2$, o dicho más formalmente,
+\[
+\forall t \in \mathbb{R}, \quad y_1(t) = x_2(t).
+\]
+\begin{tcolorbox}[colback=blue!10,colframe=blue!40!black]
+Ejemplo 2.3: El modelo de actor para el helicóptero puede representarse como una \textbf{composición en cascada} de dos actores de la siguiente forma:
+
+\begin{center}
+\begin{tikzpicture}
+\node[draw, minimum width=6.2cm, minimum height=3cm, anchor=west] (frame) at (0,0) {};
+\node[above=2pt of frame]{Helicopter};
+\node[draw, isosceles triangle, isosceles triangle apex angle=60,
+        minimum height=1.5cm, minimum width=1cm,
+        shape border rotate=0, anchor=west, xshift=0.4cm] (scale) at (frame.west) {$a$};
+\node[above=2pt of scale] {Scale};
+
+\node[draw, minimum width=1.8cm, minimum height=1.5cm, right=2cm of scale] (int) {$\int i$};
+\node[above=2pt of int] {Integrator};
+% Flechas
+\draw[-{Stealth[length=3mm]}] 
+    (-1,0) node[left] {$x_1$} -- (scale.west);
+\draw[-{Stealth[length=3mm]}] 
+    (scale.east) -- node[midway,above] {$y_1, x_2$} (int.west);
+\draw[-{Stealth[length=3mm]}] 
+    (int.east) -- (7,0) node[right] {$y_2$};
+
+\end{tikzpicture}
+\end{center}
+
+El actor de la izquierda representa un actor de \textbf{Escala}, parametrizado por la constante $a$, definida por
+
+\[
+\forall t \in \mathbb{R}, \quad y_1(t) = a x_1(t). \tag{2.6}
+\]
+
+De manera más compacta, podemos escribir $y_1 = a x_1$, donde se entiende que el producto de un escalar $a$ y una función $x_1$ se interpreta como en (2.6).  
+El actor de la derecha representa un \textbf{Integrador} parametrizado por el valor inicial $i$, definido por
+
+\[
+\forall t \in \mathbb{R}, \quad y_2(t) = i + \int_0^t x_2(\tau) \, d\tau.
+\]
+
+Si damos a los parámetros los valores $a = \tfrac{1}{I_{yy}}$ e $i = \dot{\theta}_y(0)$, vemos que este sistema representa (2.4), donde la entrada $x_1 = T_y$ es el torque y la salida $y_2 = \dot{\theta}_y$ es la velocidad angular.
+\end{tcolorbox}
+
+\newpage
+
+
+\thispagestyle{fancy}
+\fancyhf{} 
+\fancyhead[R]{\textit{\textcolor{black}{2. DINÁMICA CONTINUA}}}
+\fancyfoot[L]{\textcolor{blue}{\textit{Lee \& Seshia, Introducción a los Sistemas Embebidos}}} 
+\fancyfoot[R]{27}
+
+En la figura anterior, hemos personalizado los \textit{iconos}, que son los cuadros que representan 
+a los actores. Estos actores particulares (\textit{escalador} e \textit{integrador}) son bloques 
+de construcción particularmente útiles para elaborar modelos de dinámicas físicas, de modo que 
+asignarles notaciones visuales reconocibles es útil.
+Podemos tener actores que tengan múltiples señales de entrada y/o múltiples señales de salida. 
+Estos se representan de manera similar, como en el siguiente ejemplo, que tiene dos señales de 
+entrada y una señal de salida:
+
+\begin{center}
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\node[draw, minimum width=2cm, minimum height=1.2cm] (block) {$S$};
+\node[left=of block.west, xshift=-1cm, yshift=0.4cm] (x1) {$x_1$};
+\node[left=of block.west, xshift=-1cm, yshift=-0.4cm] (x2) {$x_2$};
+\node[right=of block.east, xshift=1cm] (y) {$y$};
+\draw[-{Stealth[length=3mm]}] (x1.east) -- (block.west |- x1.east);
+\draw[-{Stealth[length=3mm]}] (x2.east) -- (block.west |- x2.east);
+\draw[-{Stealth[length=3mm]}] (block.east) -- (y.west);
+\end{tikzpicture}
+\end{center}
+Un bloque de construcción particularmente útil con esta forma es un \textit{sumador de señales}, 
+definido por
+\[
+  \forall t \in \mathbb{R}, \quad y(t) = x_1(t) + x_2(t).
+\]
+Esto a menudo se representará mediante un ícono personalizado como el siguiente:
+\begin{center}
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\node[draw, circle, minimum size=1cm] (sum) {$+$};
+\node[left=1cm of sum] (x1) {$x_1$};
+\node[below=1cm of sum] (x2) {$x_2$};
+\node[right=1cm of sum] (y) {$y$};
+\draw[-{Stealth[length=3mm]}] (x1.east) -- (sum.west);
+\draw[-{Stealth[length=3mm]}] (x2.north) -- (sum.south);
+\draw[-{Stealth[length=3mm]}] (sum.east) -- (y.west);
+\end{tikzpicture}
+\end{center}
+A veces, una de las entradas se restará en lugar de sumarse; en ese caso, el ícono se 
+personaliza aún más con un signo menos cerca de esa entrada, como se muestra a continuación:
+\begin{center}
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+\node[draw, circle, minimum size=1cm] (sum) {$+$};
+\node[left=1cm of sum] (x1) {$x_1$};
+\node[below=1cm of sum] (x2) {$x_2$};
+\node[right=1cm of sum] (y) {$y$};
+\draw[-{Stealth[length=3mm]}] (x1.east) -- (sum.west);
+\draw[-{Stealth[length=3mm]}] (x2.north) -- (sum.south);
+\draw[-{Stealth[length=3mm]}] (sum.east) -- (y.west);
+\node[below right =2pt of sum] {$-$};
+\end{tikzpicture}
+\end{center}
+Este actor representa una función \(S : (\mathbb{R} \to \mathbb{R})^2 \to (\mathbb{R} \to \mathbb{R})\) dada por
+\[
+\forall t \in \mathbb{R}, \; \forall x_1, x_2 \in (\mathbb{R} \to \mathbb{R}), \quad
+\big( S(x_1, x_2) \big)(t) = y(t) = x_1(t) - x_2(t).
+\]
+Nótese la notación cuidadosa. \(S(x_1, x_2)\) es una función en \(\mathbb{R}^\mathbb{R}\). 
+Por lo tanto, puede evaluarse en un \(t \in \mathbb{R}\).
+
+
+
+\end{document}
+
